@@ -7,7 +7,7 @@
 #include <math.h>
 
 const int NUM_MAQUINAS = 64;
-const int MAX_TENTATIVAS = 10; // Número máximo de tentativas após colisão
+const int MAX_TENTATIVAS = 10;
 
 std::vector<std::pair<std::string, int>> buffer(NUM_MAQUINAS);
 
@@ -15,10 +15,9 @@ int pacotesEnviadosComSucesso = 0;
 int totalPacotesEnviados = 0;
 
 void enviarPacote(int maquinaOrigem, int tentativa = 1) {
-    int bytes = rand() % 100 + 1; // Número aleatório de bytes no pacote (entre 1 e 100)
+    int bytes = rand() % 200 + 1;
     int maquinaDestino;
 
-    // Escolhe aleatoriamente a máquina de destino (evita a máquina de origem)
     do {
         maquinaDestino = rand() % NUM_MAQUINAS;
     } while (maquinaDestino == maquinaOrigem);
@@ -30,11 +29,11 @@ void enviarPacote(int maquinaOrigem, int tentativa = 1) {
             std::cout << "Colisao! Maquina " << maquinaOrigem << " e Maquina " << maquinaDestino << std::endl;
 
                 if (tentativa <= MAX_TENTATIVAS) {
-                // Espera exponencial após colisão
+
                 int espera = rand() % static_cast<int>(pow(2, tentativa) * 1000);
                 std::this_thread::sleep_for(std::chrono::milliseconds(espera));
 
-                enviarPacote(maquinaOrigem, tentativa + 1); // Retransmite após a espera
+                enviarPacote(maquinaOrigem, tentativa + 1);
             } else {
                 std::cout << "Numero maximo de tentativas atingido. Desistindo da transmissao." << std::endl;
                         buffer[maquinaDestino] = {"Colisao", 0};
@@ -66,13 +65,11 @@ void simularRede() {
         std::this_thread::sleep_for(std::chrono::milliseconds(rand() % 1000));
     }
 
-    // Exibe conteúdo do buffer
     std::cout << "\nConteudo do Buffer:\n";
         for (int i = 0; i < NUM_MAQUINAS; ++i) {
         std::cout << "Maquina " << i << ": " << buffer[i].first << " (" << buffer[i].second << " bytes)" << std::endl;
     }
 
-    // Calcula a porcentagem de sucesso
     double porcentagemSucesso = (static_cast<double>(pacotesEnviadosComSucesso) / totalPacotesEnviados) * 100;
 
     std::cout << "\nPorcentagem de sucesso: " << porcentagemSucesso << "%" << std::endl;
