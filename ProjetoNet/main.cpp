@@ -6,8 +6,8 @@
 #include <thread>
 #include <math.h>
 
-const int NUM_MAQUINAS = 64;
-const int MAX_TENTATIVAS = 10;
+int NUM_MAQUINAS = 64;
+int MAX_TENTATIVAS = 10;
 
 std::vector<std::pair<std::string, int>> buffer(NUM_MAQUINAS);
 
